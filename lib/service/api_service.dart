@@ -5,6 +5,7 @@ import 'package:flutter_intermediate_story_app/common/exception/custom_exception
 import 'package:flutter_intermediate_story_app/data/model/request/add_story_request_model.dart';
 import 'package:flutter_intermediate_story_app/data/model/request/login_request_model.dart';
 import 'package:flutter_intermediate_story_app/data/model/request/register_request_model.dart';
+import 'package:flutter_intermediate_story_app/data/model/request/story_request_model.dart';
 import 'package:flutter_intermediate_story_app/data/model/response/add_story_response_model.dart';
 import 'package:flutter_intermediate_story_app/data/model/response/detail_story_response_model.dart';
 import 'package:flutter_intermediate_story_app/data/model/response/login_response_model.dart';
@@ -72,9 +73,12 @@ class ApiService {
     }
   }
 
-  Future<StoryResponseModel> getAllStory(String token) async {
+  Future<StoryResponseModel> getAllStory(
+      String token, StoryRequestModel requestData) async {
     final response = await https.get(
-      Uri.parse("$_baseUrl/stories"),
+      Uri.parse(
+        "$_baseUrl/stories?page=${requestData.page}&size=${requestData.size}&location=${requestData.location}",
+      ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
