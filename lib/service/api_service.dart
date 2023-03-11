@@ -141,9 +141,7 @@ class ApiService {
       'Authorization': 'Bearer $token',
     };
 
-    final Map<String, String> fields = {
-      "description": storyData.description,
-    };
+    final Map<String, String> fields = storyData.toJson();
 
     request.files.add(multiPartFile);
     request.fields.addAll(fields);

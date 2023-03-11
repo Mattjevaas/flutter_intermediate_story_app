@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_intermediate_story_app/service/api_service.dart';
 import 'package:flutter_intermediate_story_app/service/auth_service.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../common/enumeration/result_state_enum.dart';
 import '../data/model/response/list_story_model.dart';
@@ -20,6 +21,7 @@ class DetailProvider extends ChangeNotifier {
     _getStory();
   }
 
+  final Set<Marker> markers = {};
   late ListStory _listStory;
   late ResultState _state;
 
@@ -50,7 +52,20 @@ class DetailProvider extends ChangeNotifier {
       _state = ResultState.noData;
     }
 
+    _createMarker();
     notifyListeners();
+  }
+
+  void _createMarker() {
+    if (listStory.lat != null && listStory.lon != null) {
+      final marker = Marker(
+        markerId: const MarkerId("curr_position"),
+        position: LatLng(listStory.lat!, listStory.lon!),
+      );
+
+      markers.add(marker);
+      notifyListeners();
+    }
   }
 
   Future<void> refreshData() async {

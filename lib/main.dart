@@ -5,6 +5,7 @@ import 'package:flutter_intermediate_story_app/ui/add_story_page.dart';
 import 'package:flutter_intermediate_story_app/ui/detail_page.dart';
 import 'package:flutter_intermediate_story_app/ui/home_page.dart';
 import 'package:flutter_intermediate_story_app/ui/login_page.dart';
+import 'package:flutter_intermediate_story_app/ui/maps_page.dart';
 import 'package:flutter_intermediate_story_app/ui/register_page.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,21 +30,25 @@ class MyApp extends StatelessWidget {
       routerConfig: GoRouter(
         initialLocation: "/login",
         redirect: (context, GoRouterState state) async {
-          if (state.location == "/login" || state.location == "/register") {
-            final auth = AuthService(
-              locale: AuthLocalDatasource(
-                prefs: SharedPreferences.getInstance(),
-              ),
-            );
+          final auth = AuthService(
+            locale: AuthLocalDatasource(
+              prefs: SharedPreferences.getInstance(),
+            ),
+          );
 
+          if (state.location == "/login" || state.location == "/register") {
             if (await auth.isUserLogin()) {
               return "/home";
             } else {
               return null;
             }
+          } else {
+            if (await auth.isUserLogin()) {
+              return null;
+            } else {
+              return "/login";
+            }
           }
-
-          return null;
         },
         routes: [
           GoRoute(
@@ -57,19 +62,6 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: "/home",
             builder: (context, state) => const HomePage(),
-            redirect: (context, state) async {
-              final auth = AuthService(
-                locale: AuthLocalDatasource(
-                  prefs: SharedPreferences.getInstance(),
-                ),
-              );
-
-              if (await auth.isUserLogin() == false) {
-                return "/login";
-              } else {
-                return null;
-              }
-            },
           ),
           GoRoute(
             path: '/detail/:storyId',
@@ -80,6 +72,13 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: '/add',
             builder: (context, state) => const AddStoryPage(),
+          ),
+          GoRoute(
+            path: '/maps/:lat/:lon',
+            builder: (context, state) => MapsPage(
+              lat: double.parse(state.params['lat']!),
+              lon: double.parse(state.params['lon']!),
+            ),
           ),
         ],
       ),

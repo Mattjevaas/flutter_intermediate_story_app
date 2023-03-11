@@ -3,6 +3,7 @@ import 'package:flutter_intermediate_story_app/data/locale/auth_local_datasource
 import 'package:flutter_intermediate_story_app/provider/detail_provider.dart';
 import 'package:flutter_intermediate_story_app/service/api_service.dart';
 import 'package:flutter_intermediate_story_app/service/auth_service.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -127,6 +128,36 @@ class DetailPage extends StatelessWidget {
                             textAlign: TextAlign.justify,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
+                          const SizedBox(height: 20.0),
+                          Text(
+                            "Location",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10.0),
+                          value.listStory.lat != null &&
+                                  value.listStory.lon != null
+                              ? SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 200,
+                                  child: GoogleMap(
+                                    mapType: MapType.normal,
+                                    markers: value.markers,
+                                    initialCameraPosition: CameraPosition(
+                                      target: LatLng(
+                                        value.listStory.lat!,
+                                        value.listStory.lon!,
+                                      ),
+                                      zoom: 15,
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  "Location Not Found",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                         ],
                       ),
                     ),

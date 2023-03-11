@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,7 +101,7 @@ class AddStoryPage extends StatelessWidget {
                   ),
 
                   // --- Description Text Field ---
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -128,8 +129,66 @@ class AddStoryPage extends StatelessWidget {
                     },
                   ),
 
-                  // --- Upload Button ---
+                  // ---- Location Field ----
                   const SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Address",
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Consumer<AddStoryProvider>(
+                    builder: (context, value, child) {
+                      return TextField(
+                        controller: value.addressController,
+                        enabled: false,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                      );
+                    },
+                  ),
+                  Consumer<AddStoryProvider>(
+                    builder: (context, value, child) {
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: value.currLatLon != null
+                              ? () async {
+                                  final data = await context.push(
+                                    '/maps/${value.currLatLon!.latitude}/${value.currLatLon!.longitude}',
+                                  );
+
+                                  if (data != null) {
+                                    final cast = data as LatLng;
+                                    value.getPosition(
+                                      lat: cast.latitude,
+                                      lon: cast.longitude,
+                                    );
+                                  }
+                                }
+                              : null,
+                          child: Text(
+                            "Ubah Lokasi",
+                            style: TextStyle(
+                              color: value.currLatLon != null
+                                  ? Colors.blue
+                                  : Colors.grey,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
+                  // --- Upload Button ---
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Expanded(child: Consumer<AddStoryProvider>(

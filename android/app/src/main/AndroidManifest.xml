@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.flutter_intermediate_story_app">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
    <application
         android:label="flutter_intermediate_story_app"
         android:name="${applicationName}"
@@ -18,6 +21,7 @@
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
+              android:value="AIzaSyDDcxX6QA-8f9b1P2oOfy45cRQR9f91sZI"
               android:resource="@style/NormalTheme"
               />
             <intent-filter>
@@ -30,5 +34,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyDDcxX6QA-8f9b1P2oOfy45cRQR9f91sZI" />
+
     </application>
 </manifest>

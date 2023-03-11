@@ -44,6 +44,10 @@ dependencies:
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.0
   build_runner: ^2.3.3
+  google_maps_flutter: ^2.2.5
+  google_maps_flutter_web: ^0.4.0+7
+  location: ^4.4.0
+  geocoding: ^2.0.5
 
 dev_dependencies:
   flutter_test:

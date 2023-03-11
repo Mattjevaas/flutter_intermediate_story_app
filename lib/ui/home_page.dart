@@ -104,8 +104,9 @@ class HomePage extends StatelessWidget {
                                               0.2,
                                       loadingBuilder:
                                           (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
+                                        if (loadingProgress == null) {
                                           return child;
+                                        }
 
                                         return Image.asset(
                                           "assets/images/placeholder.png",
