@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_intermediate_story_app/common/config/flavor_config.dart';
+import 'package:flutter_intermediate_story_app/common/enumeration/flavor_type.dart';
 import 'package:flutter_intermediate_story_app/data/locale/auth_local_datasource.dart';
 import 'package:flutter_intermediate_story_app/provider/detail_provider.dart';
 import 'package:flutter_intermediate_story_app/service/api_service.dart';
@@ -128,36 +130,42 @@ class DetailPage extends StatelessWidget {
                             textAlign: TextAlign.justify,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
-                          const SizedBox(height: 20.0),
-                          Text(
-                            "Location",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10.0),
-                          value.listStory.lat != null &&
-                                  value.listStory.lon != null
-                              ? SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 200,
-                                  child: GoogleMap(
-                                    mapType: MapType.normal,
-                                    markers: value.markers,
-                                    initialCameraPosition: CameraPosition(
-                                      target: LatLng(
-                                        value.listStory.lat!,
-                                        value.listStory.lon!,
+
+                          if (FlavorConfig.instance.flavor == FlavorType.paid)
+                            const SizedBox(height: 20.0),
+                          if (FlavorConfig.instance.flavor == FlavorType.paid)
+                            Text(
+                              "Location",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          if (FlavorConfig.instance.flavor == FlavorType.paid)
+                            const SizedBox(height: 10.0),
+                          if (FlavorConfig.instance.flavor == FlavorType.paid)
+                            value.listStory.lat != null &&
+                                    value.listStory.lon != null
+                                ? SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 200,
+                                    child: GoogleMap(
+                                      mapType: MapType.normal,
+                                      markers: value.markers,
+                                      initialCameraPosition: CameraPosition(
+                                        target: LatLng(
+                                          value.listStory.lat!,
+                                          value.listStory.lon!,
+                                        ),
+                                        zoom: 15,
                                       ),
-                                      zoom: 15,
                                     ),
+                                  )
+                                : Text(
+                                    "Location Not Found",
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
                                   ),
-                                )
-                              : Text(
-                                  "Location Not Found",
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
                         ],
                       ),
                     ),

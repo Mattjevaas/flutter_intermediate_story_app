@@ -3,6 +3,8 @@ import 'package:flutter_intermediate_story_app/service/api_service.dart';
 import 'package:flutter_intermediate_story_app/service/auth_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../common/config/flavor_config.dart';
+import '../common/enumeration/flavor_type.dart';
 import '../common/enumeration/result_state_enum.dart';
 import '../data/model/response/list_story_model.dart';
 
@@ -51,8 +53,10 @@ class DetailProvider extends ChangeNotifier {
     } else {
       _state = ResultState.noData;
     }
+    if (FlavorConfig.instance.flavor == FlavorType.paid) {
+      _createMarker();
+    }
 
-    _createMarker();
     notifyListeners();
   }
 

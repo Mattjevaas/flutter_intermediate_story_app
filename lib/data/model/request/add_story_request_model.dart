@@ -13,9 +13,17 @@ class AddStoryRequestModel {
     this.lon,
   });
 
-  Map<String, String> toJson() => {
+  Map<String, String> toJson() {
+    if (lat == null && lon == null) {
+      return {
         "description": description,
-        "lat": lat?.toString() ?? "",
-        "lon": lon?.toString() ?? "",
       };
+    }
+
+    return {
+      "description": description,
+      "lat": lat?.toString() ?? "",
+      "lon": lon?.toString() ?? "",
+    };
+  }
 }

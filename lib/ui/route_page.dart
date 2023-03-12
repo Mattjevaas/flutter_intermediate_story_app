@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_intermediate_story_app/data/locale/auth_local_datasource.dart';
+import 'package:flutter_intermediate_story_app/common/config/flavor_config.dart';
 import 'package:flutter_intermediate_story_app/service/auth_service.dart';
 import 'package:flutter_intermediate_story_app/ui/add_story_page.dart';
 import 'package:flutter_intermediate_story_app/ui/detail_page.dart';
@@ -7,14 +7,10 @@ import 'package:flutter_intermediate_story_app/ui/home_page.dart';
 import 'package:flutter_intermediate_story_app/ui/login_page.dart';
 import 'package:flutter_intermediate_story_app/ui/maps_page.dart';
 import 'package:flutter_intermediate_story_app/ui/register_page.dart';
+import 'package:flutter_intermediate_story_app/ui/splash_page.dart';
 import 'package:go_router_flow/go_router_flow.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_strategy/url_strategy.dart';
 
-void main() {
-  setPathUrlStrategy();
-  runApp(const MyApp());
-}
+import '../common/enumeration/flavor_type.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -28,22 +24,22 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routerConfig: GoRouter(
-        initialLocation: "/login",
-        redirect: (context, GoRouterState state) async {
-          final auth = AuthService(
-            locale: AuthLocalDatasource(
-              prefs: SharedPreferences.getInstance(),
-            ),
-          );
+        initialLocation: "/splash",
+        redirect: (context, GoRouterState state) {
+          if (state.location == "/splash") {
+            return null;
+          }
+
+          final bool isLogin = AuthService.instance.isLogin;
 
           if (state.location == "/login" || state.location == "/register") {
-            if (await auth.isUserLogin()) {
+            if (isLogin) {
               return "/home";
             } else {
               return null;
             }
           } else {
-            if (await auth.isUserLogin()) {
+            if (isLogin) {
               return null;
             } else {
               return "/login";
@@ -51,6 +47,10 @@ class MyApp extends StatelessWidget {
           }
         },
         routes: [
+          GoRoute(
+            path: "/splash",
+            builder: (context, state) => const SplashPage(),
+          ),
           GoRoute(
             path: "/login",
             builder: (context, state) => const LoginPage(),
@@ -73,13 +73,14 @@ class MyApp extends StatelessWidget {
             path: '/add',
             builder: (context, state) => const AddStoryPage(),
           ),
-          GoRoute(
-            path: '/maps/:lat/:lon',
-            builder: (context, state) => MapsPage(
-              lat: double.parse(state.params['lat']!),
-              lon: double.parse(state.params['lon']!),
+          if (FlavorConfig.instance.flavor == FlavorType.paid)
+            GoRoute(
+              path: '/maps/:lat/:lon',
+              builder: (context, state) => MapsPage(
+                lat: double.parse(state.params['lat']!),
+                lon: double.parse(state.params['lon']!),
+              ),
             ),
-          ),
         ],
       ),
     );

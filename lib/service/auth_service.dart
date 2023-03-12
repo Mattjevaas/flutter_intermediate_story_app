@@ -10,16 +10,29 @@ class AuthService {
     _instance._locale = locale;
     return _instance;
   }
-
   AuthService._internal();
+
+  bool _isLogin = false;
+
+  bool get isLogin => _isLogin;
+  static AuthService get instance => _instance;
 
   Future<bool> userLogin(LoginResult loginData) async {
     final res = await _locale!.saveAuthData(loginData);
+
+    _isLogin = res;
     return res;
   }
 
   Future<bool> userLogout() async {
     final res = await _locale!.deleteAuthData();
+
+    if (res) {
+      _isLogin = false;
+    } else {
+      _isLogin = true;
+    }
+
     return res;
   }
 
@@ -27,9 +40,11 @@ class AuthService {
     final res = await _locale!.getAuthData();
 
     if (res != null) {
+      _isLogin = true;
       return true;
     }
 
+    _isLogin = false;
     return false;
   }
 

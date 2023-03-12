@@ -1,22 +1,18 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'login_result_model.dart';
 
-class LoginResponseModel {
-  LoginResponseModel({
-    required this.error,
-    required this.message,
-    required this.loginResult,
-  });
+part 'login_response_model.freezed.dart';
+part 'login_response_model.g.dart';
 
-  final bool error;
-  final String message;
-  final LoginResult? loginResult;
+@freezed
+class LoginResponseModel with _$LoginResponseModel {
+  const factory LoginResponseModel({
+    required bool error,
+    required String message,
+    required LoginResult? loginResult,
+  }) = _LoginResponseModel;
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
-      LoginResponseModel(
-        error: json["error"],
-        message: json["message"],
-        loginResult: json["loginResult"] != null
-            ? LoginResult.fromJson(json["loginResult"])
-            : null,
-      );
+      _$LoginResponseModelFromJson(json);
 }

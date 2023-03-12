@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../common/config/flavor_config.dart';
+import '../common/enumeration/flavor_type.dart';
 import '../data/locale/auth_local_datasource.dart';
 import '../provider/add_story_provider.dart';
 import '../service/api_service.dart';
@@ -130,62 +132,68 @@ class AddStoryPage extends StatelessWidget {
                   ),
 
                   // ---- Location Field ----
-                  const SizedBox(height: 30),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Address",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
+                  if (FlavorConfig.instance.flavor == FlavorType.paid)
+                    const SizedBox(height: 30),
+                  if (FlavorConfig.instance.flavor == FlavorType.paid)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Address",
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Consumer<AddStoryProvider>(
-                    builder: (context, value, child) {
-                      return TextField(
-                        controller: value.addressController,
-                        enabled: false,
-                        maxLines: null,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
-                      );
-                    },
-                  ),
-                  Consumer<AddStoryProvider>(
-                    builder: (context, value, child) {
-                      return Align(
-                        alignment: Alignment.centerLeft,
-                        child: TextButton(
-                          onPressed: value.currLatLon != null
-                              ? () async {
-                                  final data = await context.push(
-                                    '/maps/${value.currLatLon!.latitude}/${value.currLatLon!.longitude}',
-                                  );
 
-                                  if (data != null) {
-                                    final cast = data as LatLng;
-                                    value.getPosition(
-                                      lat: cast.latitude,
-                                      lon: cast.longitude,
+                  if (FlavorConfig.instance.flavor == FlavorType.paid)
+                    const SizedBox(height: 10),
+                  if (FlavorConfig.instance.flavor == FlavorType.paid)
+                    Consumer<AddStoryProvider>(
+                      builder: (context, value, child) {
+                        return TextField(
+                          controller: value.addressController,
+                          enabled: false,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                          ),
+                        );
+                      },
+                    ),
+                  if (FlavorConfig.instance.flavor == FlavorType.paid)
+                    Consumer<AddStoryProvider>(
+                      builder: (context, value, child) {
+                        return Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton(
+                            onPressed: value.currLatLon != null
+                                ? () async {
+                                    final data = await context.push(
+                                      '/maps/${value.currLatLon!.latitude}/${value.currLatLon!.longitude}',
                                     );
+
+                                    if (data != null) {
+                                      final cast = data as LatLng;
+                                      value.getPosition(
+                                        lat: cast.latitude,
+                                        lon: cast.longitude,
+                                      );
+                                    }
                                   }
-                                }
-                              : null,
-                          child: Text(
-                            "Ubah Lokasi",
-                            style: TextStyle(
-                              color: value.currLatLon != null
-                                  ? Colors.blue
-                                  : Colors.grey,
+                                : null,
+                            child: Text(
+                              "Ubah Lokasi",
+                              style: TextStyle(
+                                color: value.currLatLon != null
+                                    ? Colors.blue
+                                    : Colors.grey,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
 
                   // --- Upload Button ---
                   const SizedBox(height: 20),

@@ -1,20 +1,18 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'list_story_model.dart';
 
-class DetailStoryResponseModel {
-  DetailStoryResponseModel({
-    required this.error,
-    required this.message,
-    required this.listStory,
-  });
+part 'detail_story_response_model.freezed.dart';
+part 'detail_story_response_model.g.dart';
 
-  final bool error;
-  final String message;
-  final ListStory? listStory;
+@freezed
+class DetailStoryResponseModel with _$DetailStoryResponseModel {
+  const factory DetailStoryResponseModel({
+    required bool error,
+    required String message,
+    @JsonKey(name: "story") required ListStory? listStory,
+  }) = _DetailStoryResponseModel;
 
   factory DetailStoryResponseModel.fromJson(Map<String, dynamic> json) =>
-      DetailStoryResponseModel(
-        error: json["error"],
-        message: json["message"],
-        listStory: ListStory.fromJson(json["story"]),
-      );
+      _$DetailStoryResponseModelFromJson(json);
 }

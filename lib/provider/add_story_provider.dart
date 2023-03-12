@@ -6,6 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 
+import '../common/config/flavor_config.dart';
+import '../common/enumeration/flavor_type.dart';
 import '../common/exception/custom_exception.dart';
 import '../service/api_service.dart';
 import '../service/auth_service.dart';
@@ -22,7 +24,9 @@ class AddStoryProvider extends ChangeNotifier {
     required AuthService authService,
   })  : _apiService = apiService,
         _authService = authService {
-    _getCurrentPosition();
+    if (FlavorConfig.instance.flavor == FlavorType.paid) {
+      _getCurrentPosition();
+    }
   }
 
   XFile? _imageFile;

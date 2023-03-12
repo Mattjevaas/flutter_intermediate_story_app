@@ -123,7 +123,7 @@ class RegisterPage extends StatelessWidget {
                                               color: Colors.white,
                                             ),
                                           )
-                                        : const Text("SIGN IN"),
+                                        : const Text("SIGN UP"),
                                   ),
                                 );
                               },

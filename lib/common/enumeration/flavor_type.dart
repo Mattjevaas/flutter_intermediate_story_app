@@ -1,0 +1,1 @@
+enum FlavorType { free, paid }

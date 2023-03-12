@@ -1,15 +1,15 @@
-class AddStoryResponseModel {
-  AddStoryResponseModel({
-    required this.error,
-    required this.message,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final bool error;
-  final String message;
+part 'add_story_response_model.freezed.dart';
+part 'add_story_response_model.g.dart';
+
+@freezed
+class AddStoryResponseModel with _$AddStoryResponseModel {
+  const factory AddStoryResponseModel({
+    required bool error,
+    required String message,
+  }) = _AddStoryResponseModel;
 
   factory AddStoryResponseModel.fromJson(Map<String, dynamic> json) =>
-      AddStoryResponseModel(
-        error: json["error"],
-        message: json["message"],
-      );
+      _$AddStoryResponseModelFromJson(json);
 }
