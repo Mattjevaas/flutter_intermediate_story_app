@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_intermediate_story_app/service/api_service.dart';
 import 'package:flutter_intermediate_story_app/service/auth_service.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../common/config/flavor_config.dart';
@@ -24,6 +25,7 @@ class DetailProvider extends ChangeNotifier {
   }
 
   final Set<Marker> markers = {};
+  String _currAddress = "Location Unknown";
   late ListStory _listStory;
   late ResultState _state;
 
@@ -54,7 +56,7 @@ class DetailProvider extends ChangeNotifier {
       _state = ResultState.noData;
     }
     if (FlavorConfig.instance.flavor == FlavorType.paid) {
-      _createMarker();
+      _getCurrAddress();
     }
 
     notifyListeners();
@@ -64,11 +66,29 @@ class DetailProvider extends ChangeNotifier {
     if (listStory.lat != null && listStory.lon != null) {
       final marker = Marker(
         markerId: const MarkerId("curr_position"),
+        infoWindow: InfoWindow(title: _currAddress),
         position: LatLng(listStory.lat!, listStory.lon!),
       );
 
       markers.add(marker);
       notifyListeners();
+    }
+  }
+
+  Future<void> _getCurrAddress() async {
+    if (listStory.lat != null && listStory.lon != null) {
+      final info = await geo.placemarkFromCoordinates(
+        listStory.lat!,
+        listStory.lon!,
+      );
+
+      if (info.isNotEmpty) {
+        final place = info[0];
+        _currAddress =
+            '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+      }
+
+      _createMarker();
     }
   }
 
